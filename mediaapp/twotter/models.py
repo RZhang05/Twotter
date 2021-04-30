@@ -1,8 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django import forms
 
 class User(AbstractUser):
-    date_of_birth = models.DateField(null=True, blank=True)
-    status = models.TextField(max_length=100,blank=True)
-    img_name = models.TextField(max_length=500,blank=True)
+	date_of_birth = models.DateField(help_text='YYYY-MM-DD')
+	status = models.TextField(max_length=100,blank=True,help_text='Optional.')
+	img_name = models.TextField(max_length=500,blank=True)
+
+	def __str__(self):
+		return self.username

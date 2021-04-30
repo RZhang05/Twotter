@@ -7,9 +7,6 @@ from .models import User as CustomUser
 
 class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
-    fieldsets = UserAdmin.fieldsets + (
-        (None, {'fields': ('date_of_birth', 'status', 'img_name',)}),
-    )
     fieldsets = (
         ('Account Info', {'fields': ('email', 'username', 'password', 'date_joined')}),
         ('Personal Info', {'fields': ('first_name', 'last_name', 'date_of_birth')}),

@@ -4,6 +4,9 @@ from django.urls import reverse
 from twotter.forms import CustomUserCreationForm
 
 # Create your views here.
+def profile(request):
+	return render(request, 'twotter/profile.html')
+
 def dashboard(request):
 	return render(request, 'twotter/dashboard.html')
 

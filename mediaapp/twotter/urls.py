@@ -1,9 +1,9 @@
-from django.conf.urls import include, url
-from twotter.views import dashboard, signup, profile
+from django.urls import include, path, re_path
+from . import views
 
 urlpatterns = [
-	url(r"^accounts/", include("django.contrib.auth.urls")),
-	url(r"^dashboard/", dashboard, name="dashboard"),
-	url(r"^profile/", profile, name="profile"),
-	url(r"^signup/", signup, name="signup"),
+	path("accounts/", include("django.contrib.auth.urls")),
+	path("dashboard/", views.dashboard,name="dashboard"),
+	path('profile/<username>/', views.profile, name="profile"),
+	path("signup/", views.signup,name="signup"),
 ]

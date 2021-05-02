@@ -1,4 +1,6 @@
 .idea/
 venv/
 vimtmp/
-mediaapp/db.sqlite3
+db.sqlite3
+*.pyc
+__init__.py

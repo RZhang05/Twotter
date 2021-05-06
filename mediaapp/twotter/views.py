@@ -21,7 +21,8 @@ def profile(request, username):
 	return render(request, 'twotter/profile.html', context)
 
 def dashboard(request):
-	return render(request, 'twotter/dashboard.html')
+	users = User.objects.exclude(username=request.user.username)
+	return render(request, 'twotter/dashboard.html',{"user_list":users})
 
 @login_required
 def edit_profile(request, username):

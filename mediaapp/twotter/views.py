@@ -51,3 +51,9 @@ def signup(request):
 			return redirect(reverse("dashboard"))
 	
 	return render(request, "twotter/signup.html",{"form":form})
+
+def chat(request, room_name):
+	return render(request, "twotter/chat.html", {"room_name": room_name})
+
+
+

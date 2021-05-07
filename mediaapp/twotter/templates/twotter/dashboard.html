@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 Hello, {{user.username|default:'Guest'}}!
 
@@ -14,21 +16,9 @@ Hello, {{user.username|default:'Guest'}}!
 <div>
 	<div id = "user-list">
 	Choose a user to chat with:<br>
-	<div id = "chosen"> Nobody selected.  </div>
-		<h3> Users </h3>
-		{% for user in user_list %}
-			<input id = "user" type = "button" value = {{user.username}}>
-		{% endfor %}		
 	</div>
 </div>
 
-<script>
-	const list = document.querySelectorAll('#user');
-	list.forEach(function(userButton) {
-		userButton.onclick = function(e) {
-			document.querySelector('#chosen').innerHTML= e.target.value;
-		}
-	})
-</script>
+<script src = "{ static 'js/main.js' %}"></script>
 
 {% endblock %}

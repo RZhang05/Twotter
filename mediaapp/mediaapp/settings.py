@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 	'channels',
+	'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -121,7 +122,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'test')
+STATICFILES_DIRS = [
+	os.path.join(BASE_DIR, 'static'),
+]
 STATIC_URL = '/static/'
 
 # Default primary key field type
@@ -146,4 +150,11 @@ CHANNEL_LAYERS = {
             "hosts": [('127.0.0.1', 6379)],
         },
     },
+}
+
+# Rest framework
+
+REST_FRAMEWORK = {
+	'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+	'PAGE_SIZE': 50
 }

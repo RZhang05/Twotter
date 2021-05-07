@@ -2,8 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+
 from twotter.forms import CustomUserCreationForm, CustomUserChangeForm
 from twotter.models import User
+from twotter.serializers import UserModelSerializer
+
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.authentication import SessionAuthentication
 
 # Create your views here.
 def profile(request, username):
@@ -21,8 +28,7 @@ def profile(request, username):
 	return render(request, 'twotter/profile.html', context)
 
 def dashboard(request):
-	users = User.objects.exclude(username=request.user.username)
-	return render(request, 'twotter/dashboard.html',{"user_list":users})
+	return render(request, 'twotter/dashboard.html')
 
 @login_required
 def edit_profile(request, username):
@@ -56,5 +62,15 @@ def signup(request):
 def chat(request, room_name):
 	return render(request, "twotter/chat.html", {"room_name": room_name})
 
-
-
+# API
+class UserModelViewSet(ModelViewSet):
+	queryset = User.objects.all()
+	serializer_class = UserModelSerializer
+	allowed_methods = ('GET', 'HEAD', 'OPTIONS')
+	pagination_class = None
+	
+	def list(self, request, *args, **kwargs):
+		self.queryset = self.queryset.exclude(username=request.user.username)
+		print(self.queryset)
+		serialized = UserModelSerializer(self.queryset, many=True)
+		return Response(serialized.data)

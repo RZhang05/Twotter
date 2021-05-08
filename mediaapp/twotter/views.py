@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.db.models import Q
 
 from twotter.forms import CustomUserCreationForm, CustomUserChangeForm
-from twotter.models import User
-from twotter.serializers import UserModelSerializer
+from twotter.models import User, Message
+from twotter.serializers import UserModelSerializer, MessageModelSerializer
 
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -59,8 +60,8 @@ def signup(request):
 	
 	return render(request, "twotter/signup.html",{"form":form})
 
-def chat(request, room_name):
-	return render(request, "twotter/chat.html", {"room_name": room_name})
+def chat(request):
+	return render(request, "twotter/chat.html")
 
 # API
 class UserModelViewSet(ModelViewSet):
@@ -71,6 +72,35 @@ class UserModelViewSet(ModelViewSet):
 	
 	def list(self, request, *args, **kwargs):
 		self.queryset = self.queryset.exclude(username=request.user.username)
-		print(self.queryset)
 		serialized = UserModelSerializer(self.queryset, many=True)
 		return Response(serialized.data)
+
+class MessagePagination(PageNumberPagination):
+	page_size = 20
+
+class CsrfExemptAuthentication(SessionAuthentication):
+	def enforce_csrf(self, request):
+		return
+
+class MessageModelViewSet(ModelViewSet):
+	queryset = Message.objects.all()
+	serializer_class = MessageModelSerializer
+	allowed_methods = ('GET', 'POST', 'HEAD', 'OPTIONS')
+	authentication_classes = (CsrfExemptAuthentication,)
+	pagination_class = MessagePagination
+	
+	def list(self, request, *args, **kwargs):
+		self.queryset = self.queryset.filter(Q(receiver=request.user) | Q(sender=request.user))
+		target = self.request.query_params.get('target', None)
+		if target is not None:
+			self.queryset = self.queryset.filter(Q(receiver=request.user, sender__username=target) | 
+			Q(receiver__username = target, sender=request.user))
+		serialized = MessageModelSerializer(self.queryset, many=True)
+		return Response(serialized.data)
+
+	def retrieve(self, request, *args, **kwargs):
+		msg = get_object_or_404(
+			self.queryset.filter(Q(receiver=request.user)|Q(sender=request.user),Q(pk=kwargs['pk']))
+		)
+		serialized = MessageModelSerializer(msg)
+		return Response(serialized.data) 

@@ -4,6 +4,7 @@ from django import forms
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
+
 class User(AbstractUser):
 	date_of_birth = models.DateField(null=True, help_text='YYYY-MM-DD')
 	status = models.TextField(max_length=100,blank=True,help_text='Optional.')
@@ -11,6 +12,19 @@ class User(AbstractUser):
 
 	def __str__(self):
 		return self.username
+
+
+class Twoot(models.Model):
+	content = models.TextField(max_length=280)
+	created_on = models.DateTimeField(auto_now_add=True)
+	updated_on = models.DateTimeField(auto_now=True)
+	author = models.ForeignKey(User, on_delete=models.CASCADE)
+	likes = models.IntegerField(default=0)
+	retwoots = models.IntegerField(default=0)
+
+	def __str__(self):
+		return self.content
+
 
 class Message(models.Model):
 	sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender', db_index=True)

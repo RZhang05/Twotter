@@ -53,7 +53,6 @@ class CustomUserCreationForm(ModelForm):
 			pass
 		
 		return self.user_img
-		
 
 	def save(self, commit=True):
 		user=super(CustomUserCreationForm,self).save(commit=False)

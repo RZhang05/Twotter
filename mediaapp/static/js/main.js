@@ -9,7 +9,6 @@ function updateUserList() {
         for (let i = 0; i < data.length; i++) {
             let userItem = `<a class="list-group-item user">${data[i]['username']}</a>`;
 			if (data[i]['username'] == receiver) {
-				console.log("RUNNING");
 				setReceiver(receiver);
             	userItem = `<a class="list-group-item user active">${data[i]['username']}</a>`;
 			}
@@ -31,7 +30,6 @@ function addMessage(message) {
 
 function getMessages(receiver) {
 	$.getJSON(`/api/message/?target=${receiver}`, function (data) {
-		console.log(messageList.val());
         messageList.empty();
 		// messageList.children('.message').remove();
         for (let i = 0; i < data.length; i++) {

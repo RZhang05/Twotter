@@ -1,5 +1,4 @@
 let userList = $('#user-list');
-let receiver = '';
 let chatInput = $('#chat-message-input')
 let chatButton = $('#chat-message-submit')
 let messageList = $('#chat-log')
@@ -8,14 +7,19 @@ function updateUserList() {
     $.getJSON(window.location.origin + '/api/user/', function (data) {
         userList.children('.user').remove();
         for (let i = 0; i < data.length; i++) {
-            const userItem = `<a class="list-group-item user">${data[i]['username']}</a>`;
+            let userItem = `<a class="list-group-item user">${data[i]['username']}</a>`;
+			if (data[i]['username'] == receiver) {
+				console.log("RUNNING");
+				setReceiver(receiver);
+            	userItem = `<a class="list-group-item user active">${data[i]['username']}</a>`;
+			}
             $(userItem).appendTo('#user-list');
         }
         $('.user').click(function () {
             userList.children('.active').removeClass('active');
             let selected = event.target;
             $(selected).addClass('active');
-		setReceiver(selected.text);
+			setReceiver(selected.text);
         });
     });
 }
@@ -27,11 +31,13 @@ function addMessage(message) {
 
 function getMessages(receiver) {
 	$.getJSON(`/api/message/?target=${receiver}`, function (data) {
-        	messageList.children('.message').remove();
-        	for (let i = 0; i < data.length; i++) {
-            		addMessage(data[i]);
-        	}
-    	});
+		console.log(messageList.val());
+        messageList.empty();
+		// messageList.children('.message').remove();
+        for (let i = 0; i < data.length; i++) {
+            	addMessage(data[i]);
+        }
+    });
 }
 
 function getMessageById(message) {

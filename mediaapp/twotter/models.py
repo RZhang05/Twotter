@@ -13,6 +13,18 @@ class User(AbstractUser):
 	def __str__(self):
 		return self.username
 
+	def get_followers(self):
+		return Follow.objects.filter(subject=self)
+
+	def get_following(self):
+		return Follow.objects.filter(follower=self)
+
+
+class Follow(models.Model):
+	created_on =  models.DateTimeField(auto_now_add=True, editable = False)
+	subject = models.ForeignKey(User, related_name = "subject", on_delete=models.CASCADE)
+	follower = models.ForeignKey(User, related_name = "follower", on_delete=models.CASCADE)
+
 
 class Twoot(models.Model):
 	content = models.TextField(max_length=280)

@@ -3,9 +3,10 @@
 {% load static %}
 
 {% block content %}
+
 <div>
 	<div id = "user-list">
-	Choose a user to chat with:<br>
+	Available users:<br>
 	</div>
 </div>
 <body>
@@ -14,9 +15,18 @@
 	<input id="chat-message-submit" type="button" value="Send">
 	 {{ room_name|json_script:"room-name" }}
 	<script>
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		let receiver = urlParams.get('username')+"";
+		if(receiver == null) receiver = '';
 		let sessionKey = '{{ request.session.session_key }}';
 		let currentUser = '{{ request.user.username }}';
 	</script>
 	<script src = "{% static 'js/main.js' %}"></script>
 </body>
+
+<br>
+<a href="{% url 'dashboard' %}">Back to dashboard</a>
+<a href="{% url 'userlist'%}">Back to user list</a>
+
 {% endblock %}

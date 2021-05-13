@@ -6,7 +6,7 @@ Hello, {{user.username|default:'Guest'}}!
 <div>
     {% if user.is_authenticated %}
 	<a href="{% url 'profile' username=user.username %}">View Profile</a>
-	<a href="{% url 'chat'%}">Chat</a>
+	<a href="{% url 'userlist'%}">User List</a>
     {% else %}
         <a href="{% url 'login' %}">Login</a>
     {% endif %}

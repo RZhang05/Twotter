@@ -14,6 +14,7 @@ urlpatterns = [
 	path("signup/", views.signup,name="signup"),
 	path('edit/<username>/', views.edit_profile, name="edit_profile"),
 	path('chat/', views.chat, name='chat'),
+	path('users/', views.userlist, name = 'userlist'),
 	
 	path(r'api/', include(router.urls)),
 ]

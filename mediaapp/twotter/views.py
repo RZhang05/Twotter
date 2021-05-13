@@ -33,7 +33,6 @@ def profile(request, username):
 def dashboard(request):
     return render(request, 'twotter/dashboard.html')
 
-
 @login_required
 def edit_profile(request, username):
     user = request.user
@@ -65,6 +64,8 @@ def signup(request):
 
     return render(request, "twotter/signup.html", {"form": form})
 
+def userlist(request):
+	return render(request, "twotter/userlist.html")
 
 def chat(request):
     return render(request, "twotter/chat.html")

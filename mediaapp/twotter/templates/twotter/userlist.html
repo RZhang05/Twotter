@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div>
+	<div id = "user-list">
+	Click on a user to view their profile:<br>
+	</div>
+</div>
+
+<script>
+	let currentUser = '{{ request.user.username }}';
+
+</script>
+<script src = "{% static 'js/userlist.js' %}"></script>
+
+{% endblock %}

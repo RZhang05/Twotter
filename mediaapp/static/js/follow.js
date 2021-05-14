@@ -12,11 +12,8 @@ function createButton() {
 		$('.follow-button').click(function() {
 			let selected = event.target;
 			if(selected.text=="Follow") {
-				selected.text="Unfollow";
 				follow(targetUser);
-			}
-			else {
-				selected.text="Follow";
+			} else {
 				unfollow(existingFollow.id);
 			}
 		});
@@ -26,13 +23,14 @@ function createButton() {
 function follow(subject) {
 	$.post('/api/follow/', {
         subject:subject
-	})
+	}, function(){window.location.href=window.location.href;} )
 }
 
 function unfollow(id) {
 	$.ajax({
-		url:`/api/follow/${id}`,
-		type: 'DELETE'				
+		url:`/api/follow/${id}/`,
+		type: 'DELETE',
+		success: function(){window.location.href=window.location.href;}
 	})
 }
 

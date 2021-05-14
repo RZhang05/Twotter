@@ -5,8 +5,8 @@ from django.urls import reverse
 from django.db.models import Q
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import User, Message
-from .serializers import UserModelSerializer, MessageModelSerializer
+from .models import User, Message, Follow
+from .serializers import UserModelSerializer, MessageModelSerializer, FollowModelSerializer
 
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -115,3 +115,16 @@ class MessageModelViewSet(ModelViewSet):
         )
         serialized = MessageModelSerializer(msg)
         return Response(serialized.data)
+
+class FollowModelViewSet(ModelViewSet):
+	queryset = Follow.objects.all()
+	serializer_class = FollowModelSerializer
+	allowed_methods = ('GET', 'POST', 'DELETE', 'HEAD', 'OPTIONS')
+	authentication_classes = (CsrfExemptAuthentication,)
+	pagination_class = MessagePagination
+
+	def list(self, request, *args, **kwargs):
+		target = self.request.query_params.get('target', None)
+		self.queryset = self.queryset.filter(Q(follower=request.user, subject__username=target))
+		serialized = FollowModelSerializer(self.queryset, many=True)
+		return Response(serialized.data)

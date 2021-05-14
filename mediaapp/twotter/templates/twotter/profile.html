@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 
 <div>
@@ -15,8 +17,10 @@ Birthday: {{ user.date_of_birth }}
 <br>
 Profile Picture: <img src = "{{ user.user_img.url }}" alt="img">
 <br>
-<a href="{% url 'dashboard' %}">Back to dashboard</a>
-<a href="{% url 'userlist' %}"> Back to user list</a>
+Followers: {{ user.get_followers.count }}
+<br>
+Following: {{ user.get_following.count }}
+<br>
 
 {% if editPerms %}
 <a href="{% url 'logout' %}">Logout</a>
@@ -24,8 +28,16 @@ Profile Picture: <img src = "{{ user.user_img.url }}" alt="img">
 <a href="{% url 'edit_profile' username %}">Edit profile</a>
 {% else %}
 <a href="{% url 'chat' %}?username={{ user.username }}"> Chat with this user</a>
+<div id = "follow-button">
+</div>
+<a href="{% url 'dashboard' %}">Back to dashboard</a>
+<a href="{% url 'userlist' %}"> Back to user list</a>
+<script>
+let currentUser = '{{ request.user.username }}';
+let targetUser = '{{ user.username }}';
+</script>
+<script src = "{% static 'js/follow.js' %}"></script>
 {% endif %}
-
 </div>
 
 {% endblock %}

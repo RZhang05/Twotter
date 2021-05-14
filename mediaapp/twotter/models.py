@@ -21,10 +21,9 @@ class User(AbstractUser):
 
 
 class Follow(models.Model):
-	created_on =  models.DateTimeField(auto_now_add=True, editable = False)
+	timestamp =  models.DateTimeField(auto_now_add=True, editable = False)
 	subject = models.ForeignKey(User, related_name = "subject", on_delete=models.CASCADE)
 	follower = models.ForeignKey(User, related_name = "follower", on_delete=models.CASCADE)
-
 
 class Twoot(models.Model):
 	content = models.TextField(max_length=280)

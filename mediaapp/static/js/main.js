@@ -39,7 +39,7 @@ function getMessages(receiver) {
 }
 
 function getMessageById(message) {
-	id = JSON.parse(message).message
+	id = JSON.parse(message).message;
 	$.getJSON(`/api/message/${id}/`, function (data) {
         if (data.receiver === receiver ||
 		(data.receiver === receiver && data.sender == currentUser)) {

@@ -1,11 +1,12 @@
 from django.urls import include, path, re_path
 from . import views
 from rest_framework.routers import DefaultRouter
-from .views import UserModelViewSet, MessageModelViewSet
+from .views import UserModelViewSet, MessageModelViewSet, FollowModelViewSet
 
 router = DefaultRouter()
 router.register(r'user', UserModelViewSet, basename = 'user-api')
 router.register(r'message', MessageModelViewSet, basename = 'message-api')
+router.register(r'follow', FollowModelViewSet, basename = 'follow-api')
 
 urlpatterns = [
 	path("accounts/", include("django.contrib.auth.urls")),

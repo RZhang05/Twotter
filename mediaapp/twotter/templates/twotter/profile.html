@@ -17,27 +17,25 @@ Birthday: {{ user.date_of_birth }}
 <br>
 Profile Picture: <img src = "{{ user.user_img.url }}" alt="img">
 <br>
-Followers: {{ user.get_followers.count }}
-<br>
-Following: {{ user.get_following.count }}
-<br>
-
+<div id = "follower"></div>
+<div id = "following"></div>
 {% if editPerms %}
 <a href="{% url 'logout' %}">Logout</a>
 <a href="{% url 'password_change' %}">Change password</a>
 <a href="{% url 'edit_profile' username %}">Edit profile</a>
 {% else %}
 <a href="{% url 'chat' %}?username={{ user.username }}"> Chat with this user</a>
-<div id = "follow-button">
-</div>
+<div id = "follow-button"></div>
 <a href="{% url 'dashboard' %}">Back to dashboard</a>
 <a href="{% url 'userlist' %}"> Back to user list</a>
+
+</div>
+
 <script>
 let currentUser = '{{ request.user.username }}';
 let targetUser = '{{ user.username }}';
 </script>
 <script src = "{% static 'js/follow.js' %}"></script>
 {% endif %}
-</div>
 
 {% endblock %}

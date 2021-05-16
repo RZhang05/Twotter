@@ -1,12 +1,34 @@
 let placeholder = $('#follow-button');
+let follower = $('#follower');
+let following = $('#following');
 let existingFollow;
 
-function createButton() {
-    $.getJSON(window.location.origin + `/api/follow/?target=${targetUser}`, function (data) {
-		let button = `<a class = "follow-button">Follow</a>`;
+function updateFollow() {
+	$.getJSON(`/api/follow/?req=followers&target=${targetUser}`, function(data) {
+		follower.text('Followers: ' + data.length)
+	});	
+	$.getJSON(`/api/follow/?req=following&target=${targetUser}`, function(data) {
+		following.text('Following: ' + data.length)
+	});
+}
+
+function changeText() {
+	$.getJSON(window.location.origin + `/api/follow/?target=${targetUser}`, function (data) {
+		let but = $('#folbut');
+		but.text('Follow');
 		if(data.length>0) {	
 			existingFollow = data[0];
-            button = `<a class = "follow-button">Unfollow</a>`;	
+			but.text('Unfollow');
+		}
+	});
+}
+
+function createButton() {
+	$.getJSON(window.location.origin + `/api/follow/?target=${targetUser}`, function (data) {
+		let button = `<a class = "follow-button" id="folbut">Follow</a>`;
+		if(data.length>0) {	
+			existingFollow = data[0];
+            button = `<a class = "follow-button" id="folbut">Unfollow</a>`;	
 		}
 		$(button).appendTo('#follow-button');
 		$('.follow-button').click(function() {
@@ -16,24 +38,26 @@ function createButton() {
 			} else {
 				unfollow(existingFollow.id);
 			}
-		});
+			updateFollow();
+			changeText();
+		});	
     });
 }
 
 function follow(subject) {
 	$.post('/api/follow/', {
         subject:subject
-	}, function(){window.location.href=window.location.href;} )
+	})
 }
 
 function unfollow(id) {
 	$.ajax({
 		url:`/api/follow/${id}/`,
-		type: 'DELETE',
-		success: function(){window.location.href=window.location.href;}
+		type: 'DELETE'
 	})
 }
 
 $(document).ready(function () {
 	createButton();
+	updateFollow();
 });

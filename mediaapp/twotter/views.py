@@ -125,6 +125,13 @@ class FollowModelViewSet(ModelViewSet):
 
 	def list(self, request, *args, **kwargs):
 		target = self.request.query_params.get('target', None)
-		self.queryset = self.queryset.filter(Q(follower=request.user, subject__username=target))
+		req = self.request.query_params.get('req', None)
+		if req is None:
+			self.queryset = self.queryset.filter(Q(follower=request.user, subject__username=target))
+		elif req == "followers":
+			self.queryset = self.queryset.filter(Q(subject__username=target))
+		elif req == "following":
+			self.queryset = self.queryset.filter(Q(follower__username=target))
+
 		serialized = FollowModelSerializer(self.queryset, many=True)
 		return Response(serialized.data)

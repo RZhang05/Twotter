@@ -1,0 +1,72 @@
+.messages {
+    position: relative;
+    padding: 10px;
+    margin: 0;
+    height: 70%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+	clear:both;
+}
+
+.messages .container {
+    clear: both;
+    overflow: hidden;
+    margin-bottom: 20px;
+	width: fit-content;
+	border-radius: 5px;
+}
+
+.messages .container.right {
+	background-color: #33BAFF;
+	float:right;
+}
+
+.messages .container.left {
+	background-color: #F8F8FF; 
+	float:left;
+}
+
+.messages .container.left img {
+	margin-left: 5px;
+    float: left;
+}
+
+.messages .container.left .text_container {
+    margin-left: 20px;
+    float: left;
+}
+
+.messages .container.right img {
+	margin-right: 5px;
+    float: right;
+}
+
+.messages .container img {
+	height: 50px;
+	width: 50px;
+	diplay: inline-block;
+	margin-top: 7px;
+	border-radius: 8px;
+}
+
+.messages .container.right .text_container {
+    margin-right: 20px;
+    float: right;
+}
+
+.messages .container .text_container {
+    display: inline-block;
+    border-radius: 6px;
+    min-width: 100px;
+    position: relative;
+	margin: 10px 0px 10px 10px;
+}
+
+.messages p {
+	margin-bottom: 5px;
+}
+
+.time {
+	font-size: 10px;
+}
+

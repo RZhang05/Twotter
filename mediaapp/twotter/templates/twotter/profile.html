@@ -15,7 +15,7 @@ Status: {{ user.status }}
 <br>
 Birthday: {{ user.date_of_birth }}
 <br>
-Profile Picture: <img src = "{{ user.user_img.url }}" alt="img">
+Profile Picture: <img width="100" height="100" src = "{{ user.user_img.url }}" alt="img">
 <br>
 <div id = "follower"></div>
 <div id = "following"></div>
@@ -26,8 +26,6 @@ Profile Picture: <img src = "{{ user.user_img.url }}" alt="img">
 {% else %}
 <a href="{% url 'chat' %}?username={{ user.username }}"> Chat with this user</a>
 <div id = "follow-button"></div>
-<a href="{% url 'dashboard' %}">Back to dashboard</a>
-<a href="{% url 'userlist' %}"> Back to user list</a>
 
 </div>
 
@@ -38,4 +36,6 @@ let targetUser = '{{ user.username }}';
 <script src = "{% static 'js/follow.js' %}"></script>
 {% endif %}
 
+<a href="{% url 'dashboard' %}">Back to dashboard</a>
+<a href="{% url 'userlist' %}"> Back to user list</a>
 {% endblock %}

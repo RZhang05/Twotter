@@ -80,6 +80,9 @@ class UserModelViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         self.queryset = self.queryset.exclude(username=request.user.username)
+        target = self.request.query_params.get('target', None)
+        if target is not None:
+            self.queryset = self.queryset.filter(Q(username=target))
         serialized = UserModelSerializer(self.queryset, many=True)
         return Response(serialized.data)
 

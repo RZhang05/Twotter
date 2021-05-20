@@ -1,7 +1,8 @@
 let userList = $('#user-list');
-let chatInput = $('#chat-message-input')
-let chatButton = $('#chat-message-submit')
-let messageList = $('#chat-log')
+let chatInput = $('#chat-message-input');
+let chatButton = $('#chat-message-submit');
+let messageList = $('#chat-log');
+let targetuser_img = '';
 
 function updateUserList() {
     $.getJSON(window.location.origin + '/api/user/', function (data) {
@@ -9,12 +10,18 @@ function updateUserList() {
         for (let i = 0; i < data.length; i++) {
             let userItem = `<a class="list-group-item user">${data[i]['username']}</a>`;
 			if (data[i]['username'] == receiver) {
+    			$.getJSON(window.location.origin + `/api/user/?target=${receiver}`, function (data) {
+					targetuser_img = data[0]['user_img']+'';	
+				});
 				setReceiver(receiver);
             	userItem = `<a class="list-group-item user active">${data[i]['username']}</a>`;
 			}
             $(userItem).appendTo('#user-list');
         }
         $('.user').click(function () {
+    		$.getJSON(window.location.origin + `/api/user/?target=${selected.text}`, function (data) {
+				targetuser_img = data[0]['user_img']+'';	
+			});
             userList.children('.active').removeClass('active');
             let selected = event.target;
             $(selected).addClass('active');
@@ -24,17 +31,34 @@ function updateUserList() {
 }
 
 function addMessage(message) {
+	let pos = 'left';
+	let user_img = targetuser_img;
+	console.log(targetuser_img);
 	const date = new Date(message.timestamp);
-	messageList.append(message.body + '\n');
+	if(message.sender === currentUser) {
+		pos = 'right';
+		user_img = userimg;
+	}
+	const messageItem = `
+		<div class = 'container ${pos}'>
+			<img src='${user_img}'>	
+			<div class = "text_container">
+				<p> ${message.body} </p>
+				<span class='time'>${date}</span>
+			</div>
+		</div>`;
+	$(messageItem).appendTo('#chat-log');
 }
 
 function getMessages(receiver) {
 	$.getJSON(`/api/message/?target=${receiver}`, function (data) {
-        messageList.empty();
-		// messageList.children('.message').remove();
+		messageList.children('.container').remove();
         for (let i = 0; i < data.length; i++) {
             	addMessage(data[i]);
         }
+		messageList.animate({
+			scrollTop: messageList.prop('scrollHeight') - messageList.prop('clientHeight')
+		}, 500);
     });
 }
 
@@ -43,8 +67,11 @@ function getMessageById(message) {
 	$.getJSON(`/api/message/${id}/`, function (data) {
         if (data.receiver === receiver ||
 		(data.receiver === receiver && data.sender == currentUser)) {
-		addMessage(data);
+			addMessage(data);
         }
+		messageList.animate({
+			scrollTop: messageList.prop('scrollHeight') - messageList.prop('clientHeight')
+		}, 500);
     });
 }
 

@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404
 class UserModelSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('username','user_img')
 
 class FollowModelSerializer(ModelSerializer):
 	subject = CharField(source='subject.username')

@@ -4,16 +4,17 @@
 
 {% block content %}
 
+<link rel="stylesheet" href = "{% static 'css/chat.css' %}">
+
 <div>
 	<div id = "user-list">
 	Available users:<br>
 	</div>
 </div>
 <body>
-	<textarea id="chat-log" cols="100" rows="20" readonly="true"></textarea><br>
-	<input id="chat-message-input" type="text" placeholder = "Type your message here..." size="100" maxlength="500"><br>
-	<input id="chat-message-submit" type="button" value="Send">
-	 {{ room_name|json_script:"room-name" }}
+	<div class = "messages" id="chat-log"></div>
+	<input style="width: calc(100% - 85px);" id="chat-message-input" type="text" placeholder = "Type your message here..." size="100" maxlength="500">
+	<input style="width:80px;" id="chat-message-submit" type="button" value="Send">
 	<script>
 		const queryString = window.location.search;
 		const urlParams = new URLSearchParams(queryString);
@@ -21,6 +22,7 @@
 		if(receiver == null) receiver = '';
 		let sessionKey = '{{ request.session.session_key }}';
 		let currentUser = '{{ request.user.username }}';
+		let userimg = '{{request.user.user_img.url }}';	
 	</script>
 	<script src = "{% static 'js/main.js' %}"></script>
 </body>

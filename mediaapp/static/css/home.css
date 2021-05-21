@@ -1,0 +1,41 @@
+.sidebar {
+	height: 100%;
+	width: 280px;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	overflow-x: hidden;
+	padding-top:20px;
+	padding-left:20px;
+}
+
+.sidebar img {
+	display: inline-block;
+	vertical-align:middle;
+}
+
+.sidebar span {
+	vertical-align:middle;
+	font-size: 40px;
+	display: inline-block; 
+}
+
+.sidebar a {
+	font-size: 25px;
+	display: block;
+	text-decoration: none;
+	color: #1DA1F2;
+	width: 250px;
+}
+
+.sidebar a:hover{
+	color: #000;
+}	
+
+.main {
+	padding-top:20px;
+	margin-left: 300px;
+	width: calc(80% - 300px);
+	min-width: 300px;
+}

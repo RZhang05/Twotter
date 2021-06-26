@@ -44,7 +44,7 @@
 .messages .container img {
 	height: 50px;
 	width: 50px;
-	diplay: inline-block;
+	display: inline-block;
 	margin-top: 7px;
 	border-radius: 8px;
 }

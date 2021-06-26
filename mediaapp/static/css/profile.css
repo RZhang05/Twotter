@@ -1,0 +1,18 @@
+.user {
+    display: flex;
+}
+
+.pfp {
+    margin-right: 2vw;
+}
+
+.label {
+    background-color: #1DA1F2;
+    color: #FFF;
+    padding-left: 10px;
+    width: 25vw;
+}
+
+.value {
+    padding-left: 10px;
+}

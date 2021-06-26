@@ -5,10 +5,10 @@ let existingFollow;
 
 function updateFollow() {
 	$.getJSON(`/api/follow/?req=followers&target=${targetUser}`, function(data) {
-		follower.text('Followers: ' + data.length)
+		follower.text(data.length)
 	});	
 	$.getJSON(`/api/follow/?req=following&target=${targetUser}`, function(data) {
-		following.text('Following: ' + data.length)
+		following.text(data.length)
 	});
 }
 

@@ -4,36 +4,77 @@
 
 {% block content %}
 
-<div>
-<h3> User info: </h3>
-Username: {{ user.username }}
-<br>
-Name: {{ user.first_name }}
-{{ user.last_name }}
-<br>
-Status: {{ user.status }}
-<br>
-Birthday: {{ user.date_of_birth }}
-<br>
-Profile Picture: <img width="100" height="100" src = "{{ user.user_img.url }}" alt="img">
-<br>
-<div id = "follower"></div>
-<div id = "following"></div>
-{% if editPerms %}
-<a href="{% url 'logout' %}">Logout</a>
-<a href="{% url 'password_change' %}">Change password</a>
-<a href="{% url 'edit_profile' username %}">Edit profile</a>
-{% else %}
-<a href="{% url 'chat' %}?username={{ user.username }}"> Chat with this user</a>
-<div id = "follow-button"></div>
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
 
+<div class="container">
+    <h3> User info: </h3>
+    <div class="user">
+        <div class="pfp">
+            <img width="150" height="150" src="{{ user.user_img.url }}" alt="img">
+            <div class="status">
+                "{{ user.status }}"
+            </div>
+        </div>
+        <div class="info">
+            <div class="label">
+                Username
+            </div>
+            <div class="value">
+                {{ user.username }}
+            </div>
+            <div class="label">
+                Name
+            </div>
+            <div class="value">
+                {{ user.first_name }} {{ user.last_name }}
+            </div>
+            <div class="label">
+                Birthday
+            </div>
+            <div class="value">
+                {{ user.date_of_birth }}
+            </div>
+            {% if not editPerms %}
+            <div class="label">
+                Followers
+            </div>
+            <div class="value">
+                <div id="follower"></div>
+            </div>
+            <div class="label">
+                Following
+            </div>
+            <div class="value">
+                <div id="following"></div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="links">
+
+        {% if editPerms %}
+        <div>
+            <a href="{% url 'edit_profile' username %}">Edit profile</a>
+        </div>
+        <div>
+            <a href="{% url 'password_change' %}">Change password</a>
+        </div>
+        <div>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+        {% else %}
+        <a href="{% url 'chat' %}?username={{ user.username }}"> Chat with this user</a>
+        <div id="follow-button"></div>
+        {% endif %}
+    </div>
 </div>
 
+{% if not editPerms %}
 <script>
-let currentUser = '{{ request.user.username }}';
-let targetUser = '{{ user.username }}';
+    let currentUser = '{{ request.user.username }}';
+    let targetUser = '{{ user.username }}';
 </script>
-<script src = "{% static 'js/follow.js' %}"></script>
+<script src="{% static 'js/follow.js' %}"></script>
 {% endif %}
 
 {% endblock %}

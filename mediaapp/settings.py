@@ -27,8 +27,7 @@ SECRET_KEY = 'django-insecure-1t7_!_6q-(yxw0g5y9#!^cq!mc_3z1pw2ij26g93u)!xld#uk+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['https://enigmatic-stream-08195.herokuapp.com/']
 
 # Application definition
 

@@ -19,7 +19,7 @@ function updateUserList() {
             $(userItem).appendTo('#user-list');
         }
         $('.user').click(function () {
-    		$.getJSON(window.location.origin + `/api/user/?target=${selected.text}`, function (data) {
+    		$.getJSON(window.location.origin + `/api/user/?target=${receiver}`, function (data) {
 				targetuser_img = data[0]['user_img']+'';	
 			});
             userList.children('.active').removeClass('active');
@@ -33,7 +33,6 @@ function updateUserList() {
 function addMessage(message) {
 	let pos = 'left';
 	let user_img = targetuser_img;
-	console.log(targetuser_img);
 	const date = new Date(message.timestamp);
 	if(message.sender === currentUser) {
 		pos = 'right';
@@ -104,7 +103,7 @@ $(document).ready(function () {
 	disableInput();
 	
 	var socket = new WebSocket(
-        'ws://' + window.location.host +
+        'wss://' + window.location.host +
         '/ws?session_key=${sessionKey}')
 	
 	chatInput.keypress(function (e) {

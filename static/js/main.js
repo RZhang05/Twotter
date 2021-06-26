@@ -103,7 +103,7 @@ $(document).ready(function () {
 	disableInput();
 	
 	var socket = new WebSocket(
-        'wss://' + window.location.host +
+        'ws://' + window.location.host +
         '/ws?session_key=${sessionKey}')
 	
 	chatInput.keypress(function (e) {

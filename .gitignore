@@ -4,3 +4,5 @@ vimtmp/
 db.sqlite3
 *.pyc
 __init__.py
+resources/
+staticfiles/

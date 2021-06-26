@@ -39,20 +39,22 @@ class CustomUserCreationForm(ModelForm):
 
 	def clean_user_img(self):
 		try:
-			w, h = get_image_dimensions(self.user_img)
+			user_img = self.cleaned_data['user_img']
+			h = user_img.height_field
+			w = user_img.width_field
 
 			max_width = max_height = 1000
 			if w > max_width or h > max_height:
 				raise forms.ValidationError('Please use an image that is ' + max_width + ' by ' + max_height + ' or smaller.')
 		
-			main, sub = self.user_img.content_type.split('/')
+			main, sub = user_img.content_type.split('/')
 			if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'gif', 'png']):
 				raise forms.ValidationError('Please use a JPEG, GIF or PNG image.')
 		
 		except AttributeError:
 			pass
 		
-		return self.user_img
+		return user_img	
 
 	def save(self, commit=True):
 		user=super(CustomUserCreationForm,self).save(commit=False)

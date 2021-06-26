@@ -31,7 +31,6 @@ DEBUG_PROPAGATE_EXCEPTIONS = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -196,4 +195,4 @@ LOGGING = {
     }
 }
 
-django_heroku.settings(locals()) 
+django_heroku.settings(locals())

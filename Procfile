@@ -1,1 +1,1 @@
-web: gunicorn mediaapp/mediaapp.wsgi
+web: gunicorn mediaapp.wsgi

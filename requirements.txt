@@ -7,3 +7,4 @@ channels_redis==3.2.0
 djangorestframework==3.12.4
 gunicorn
 django_heroku
+Pillow

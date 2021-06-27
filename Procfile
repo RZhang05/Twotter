@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn mediaapp.wsgi
+web: daphne mediaapp.asgi

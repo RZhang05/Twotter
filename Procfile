@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: daphne mediaapp.asgi
+web: daphne mediaapp.asgi:application

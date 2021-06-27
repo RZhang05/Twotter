@@ -5,6 +5,6 @@ sqlparse==0.4.1
 channels==3.0.3
 channels_redis==3.2.0
 djangorestframework==3.12.4
-gunicorn
+daphne
 django_heroku
 Pillow

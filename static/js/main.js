@@ -101,9 +101,11 @@ function disableInput() {
 $(document).ready(function () {
 	updateUserList();
 	disableInput();
+
+	var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
 	
 	var socket = new WebSocket(
-        'wss://' + window.location.host +
+        ws_scheme + '://' + window.location.host +
         '/ws?session_key=${sessionKey}')
 	
 	chatInput.keypress(function (e) {

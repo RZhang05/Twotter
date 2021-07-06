@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django import forms
+from django.utils import timezone
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -25,16 +26,20 @@ class Follow(models.Model):
 	subject = models.ForeignKey(User, related_name = "subject", on_delete=models.CASCADE)
 	follower = models.ForeignKey(User, related_name = "follower", on_delete=models.CASCADE)
 
+
 class Twoot(models.Model):
 	content = models.TextField(max_length=280)
-	created_on = models.DateTimeField(auto_now_add=True)
-	updated_on = models.DateTimeField(auto_now=True)
+	created_date = models.DateTimeField(default=timezone.now())
+	published_date = models.DateTimeField(blank=True, null=True)
 	author = models.ForeignKey(User, on_delete=models.CASCADE)
-	likes = models.IntegerField(default=0)
-	retwoots = models.IntegerField(default=0)
+	likes = models.ManyToManyField(User, related_name='likes', blank=True)
+	slug = models.SlugField(unique=True, blank=True)
 
 	def __str__(self):
 		return self.content
+
+	def total_likes(self):
+		return self.likes.count()
 
 
 class Message(models.Model):

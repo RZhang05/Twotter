@@ -3,9 +3,12 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.db.models import Q
+from django.utils import timezone
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import User, Message, Follow
+from .models import User, Message, Follow, Twoot
 from .serializers import UserModelSerializer, MessageModelSerializer, FollowModelSerializer
 
 from rest_framework.pagination import PageNumberPagination
@@ -32,6 +35,7 @@ def profile(request, username):
 
 def dashboard(request):
     return render(request, 'twotter/dashboard.html')
+
 
 @login_required
 def edit_profile(request, username):
@@ -64,8 +68,10 @@ def signup(request):
 
     return render(request, "twotter/signup.html", {"form": form})
 
+
 def userlist(request):
-	return render(request, "twotter/userlist.html")
+    return render(request, "twotter/userlist.html")
+
 
 def chat(request):
     return render(request, "twotter/chat.html")
@@ -119,22 +125,55 @@ class MessageModelViewSet(ModelViewSet):
         serialized = MessageModelSerializer(msg)
         return Response(serialized.data)
 
+
 class FollowModelViewSet(ModelViewSet):
-	queryset = Follow.objects.all()
-	serializer_class = FollowModelSerializer
-	allowed_methods = ('GET', 'POST', 'DELETE', 'HEAD', 'OPTIONS')
-	authentication_classes = (CsrfExemptAuthentication,)
-	pagination_class = MessagePagination
+    queryset = Follow.objects.all()
+    serializer_class = FollowModelSerializer
+    allowed_methods = ('GET', 'POST', 'DELETE', 'HEAD', 'OPTIONS')
+    authentication_classes = (CsrfExemptAuthentication,)
+    pagination_class = MessagePagination
 
-	def list(self, request, *args, **kwargs):
-		target = self.request.query_params.get('target', None)
-		req = self.request.query_params.get('req', None)
-		if req is None:
-			self.queryset = self.queryset.filter(Q(follower=request.user, subject__username=target))
-		elif req == "followers":
-			self.queryset = self.queryset.filter(Q(subject__username=target))
-		elif req == "following":
-			self.queryset = self.queryset.filter(Q(follower__username=target))
+    def list(self, request, *args, **kwargs):
+        target = self.request.query_params.get('target', None)
+        req = self.request.query_params.get('req', None)
+        if req is None:
+            self.queryset = self.queryset.filter(Q(follower=request.user, subject__username=target))
+        elif req == "followers":
+            self.queryset = self.queryset.filter(Q(subject__username=target))
+        elif req == "following":
+            self.queryset = self.queryset.filter(Q(follower__username=target))
 
-		serialized = FollowModelSerializer(self.queryset, many=True)
-		return Response(serialized.data)
+        serialized = FollowModelSerializer(self.queryset, many=True)
+        return Response(serialized.data)
+
+
+def twoot_list(request):
+    twoots = Twoot.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    return render(request, 'twoot/twoot_list.html', {'twoots': twoots})
+
+
+def twoot_detail(request, pk):
+    twoot = get_object_or_404(Twoot, pk=pk)
+    is_liked = False
+    if twoot.likes.filter(id=request.user.id).exists():
+        is_liked = True
+    return render(request, 'twoot/twoot_detail.html', {'twoot': twoot, 'is_liked': is_liked, 'total_likes': twoot.total_likes(), })
+
+
+def like_twoot(request):
+    twoot = get_object_or_404(Twoot, id=request.POST.get('id'))
+    is_liked = False
+    if twoot.likes.filter(id=request.user.id).exists():
+        twoot.likes.remove(request.user)
+        is_liked = False
+    else:
+        twoot.likes.add(request.user)
+        is_liked = True
+    context = {
+        'twoot': twoot,
+        'is_liked': is_liked,
+        'total_likes': twoot.total_likes(),
+    }
+    if request.is_ajax():
+        html = render_to_string('twoot/likes.html', context, request=request)
+        return JsonResponse({'form': html})

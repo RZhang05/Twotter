@@ -5,7 +5,7 @@ function updateUserList() {
         userList.children('.user').remove();
         for (let i = 0; i < data.length; i++) {
 			let uname = data[i]['username'];
-			const userItem = `<a href="${window.location.origin}/profile/${uname}/">${uname}</a>`;
+			const userItem = `<a href="${window.location.origin}/profile/${uname}/">${uname}</a><br>`;
             $(userItem).appendTo('#user-list');
         }
     });
